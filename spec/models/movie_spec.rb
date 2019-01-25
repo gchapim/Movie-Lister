@@ -40,4 +40,14 @@ RSpec.describe Movie, type: :model do
       end
     end
   end
+
+  describe '#roman_release_year' do
+    context 'given a movie with year' do
+      let(:movie) { Movie.new(release_year: 1980) }
+
+      it 'returns roman release year' do
+        expect(movie.roman_release_year).to be_eql('MCMLXXX')
+      end
+    end
+  end
 end

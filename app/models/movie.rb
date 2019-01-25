@@ -5,4 +5,8 @@ class Movie < ApplicationRecord
 
   validates_presence_of :title, :release_year
   validates_inclusion_of :release_year, in: 1800..Date.current.year
+
+  def roman_release_year
+    release_year.roman
+  end
 end

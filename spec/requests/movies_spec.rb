@@ -26,6 +26,7 @@ RSpec.describe 'Movies API', type: :request do
       expect(json.key? 'directors').to be_truthy
       expect(json.key? 'producers').to be_truthy
       expect(json.key? 'casting').to be_truthy
+      expect(json['roman_release_year']).to be_present
 
       expect(response.code).to be_eql('200')
     end
