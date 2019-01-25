@@ -4,4 +4,5 @@ class Movie < ApplicationRecord
   has_and_belongs_to_many :producers, join_table: :producers_movies, class_name: 'Person'
 
   validates_presence_of :title, :release_year
+  validates_inclusion_of :release_year, in: 1800..Date.current.year
 end
