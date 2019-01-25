@@ -3,7 +3,7 @@ class CreatePeople < ActiveRecord::Migration[5.2]
     create_table :people do |t|
       t.string :last_name
       t.string :first_name
-      t.text :aliases
+      t.text :aliases, array: true, default: []
 
       t.timestamps
     end
