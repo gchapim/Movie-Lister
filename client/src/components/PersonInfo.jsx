@@ -24,7 +24,7 @@ class PersonInfo extends Component {
       {person ? (
         <Container text>
           <Header as='h2' icon textAlign='center' color='purple'>
-            <Icon name='film' circular />
+            <Icon name='user' circular />
             <Header.Content>
               Person info
             </Header.Content>
