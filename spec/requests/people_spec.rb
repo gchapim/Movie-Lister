@@ -22,6 +22,7 @@ RSpec.describe 'People API', type: :request do
       json = JSON.parse(response.body)
       expect(json).not_to be_empty
       expect(json['id']).to be(people.first.id)
+      expect(json['full_name']).to be(people.first.full_name)
 
       expect(json.key? 'movies_as_director').to be_truthy
       expect(json.key? 'movies_as_producer').to be_truthy

@@ -38,7 +38,10 @@ class MoviesController < ApplicationController
   private
 
   def included_json_movie(association)
-    association.as_json(include: %i(directors casting producers), methods: :roman_release_year)
+    association.as_json(include: { directors: { methods: :full_name },
+                                   casting: { methods: :full_name },
+                                   producers: {methods: :full_name } },
+                        methods: :roman_release_year)
   end
 
   def permitted_params

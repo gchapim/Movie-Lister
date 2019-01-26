@@ -30,4 +30,13 @@ RSpec.describe Person, type: :model do
       end
     end
   end
+
+  describe '#full_name' do
+    context 'given a first name and a last name' do
+      let(:person) { Person.new(first_name: 'Joan', last_name: 'Soares') }
+      it 'returns full name' do
+        expect(person.full_name).to be_eql("#{person.first_name} #{person.last_name}")
+      end
+    end
+  end
 end

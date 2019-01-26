@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
   private
 
   def included_json_person(association)
-    association.as_json(include: %i(movies_as_producer movies_as_actor movies_as_director))
+    association.as_json(include: %i(movies_as_producer movies_as_actor movies_as_director), methods: :full_name)
   end
 
   def permitted_params
