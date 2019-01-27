@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
   before_action :person, only: %i(show update destroy)
+  before_action :relation_params, only: :update
 
   def index
     render json: included_json_person(Person.all), status: :ok
@@ -10,17 +11,20 @@ class PeopleController < ApplicationController
   end
 
   def create
-    person = Person.new(permitted_params)
+    @person = Person.new(permitted_params)
+    relation_params
 
-    if person.save
-      render json: included_json_person(person), status: :created
+    if @person.save
+      render json: included_json_person(@person), status: :created
     else
-      render json: { error: person.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: @person.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def update
-    if @person.update_attributes(permitted_params)
+    @person.attributes = permitted_params
+
+    if @person.save
       render json: included_json_person(@person), status: :ok
     else
       render json: { error: @person.errors.full_messages }, status: :unprocessable_entity
@@ -44,10 +48,21 @@ class PeopleController < ApplicationController
   def permitted_params
     params.require(:person).permit(:last_name,
                                    :first_name,
-                                   aliases: [],
-                                   movies_as_producer: [],
-                                   movies_as_actor: [],
-                                   movies_as_director: [])
+                                   aliases: [])
+  end
+
+  def relation_params
+    relation(@person.movies_as_actor, params.dig('person', 'movies_as_actor'))
+    relation(@person.movies_as_director, params.dig('person', 'movies_as_director'))
+    relation(@person.movies_as_producer, params.dig('person', 'movies_as_producer'))
+  end
+
+  def relation(relation, hashed_relation)
+    return unless hashed_relation.present?
+
+    relation << hashed_relation.map do |c|
+      Movie.find(c[:id]) if c[:id]
+    end
   end
 
   def person

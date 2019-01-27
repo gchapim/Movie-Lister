@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
   before_action :movie, only: %i(show update destroy)
+  before_action :relation_params, only: :update
 
   def index
     render json: included_json_movie(Movie.all), status: :ok
@@ -10,17 +11,19 @@ class MoviesController < ApplicationController
   end
 
   def create
-    movie = Movie.new(permitted_params)
+    @movie = Movie.new(permitted_params)
+    relation_params
 
-    if movie.save
-      render json: included_json_movie(movie), status: :created
+    if @movie.save
+      render json: included_json_movie(@movie), status: :created
     else
-      render json: { error: movie.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: @movie.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def update
-    if @movie.update_attributes(permitted_params)
+    @movie.attributes = permitted_params
+    if @movie.save
       render json: included_json_movie(@movie), status: :ok
     else
       render json: { error: @movie.errors.full_messages }, status: :unprocessable_entity
@@ -45,7 +48,22 @@ class MoviesController < ApplicationController
   end
 
   def permitted_params
-    params.require(:movie).permit(:title, :release_year, :producers, :directors, :casting)
+    params.require(:movie).permit(:title,
+                                  :release_year)
+  end
+
+  def relation_params
+    relation(@movie.casting, params.dig('movie', 'casting'))
+    relation(@movie.directors, params.dig('movie', 'directors'))
+    relation(@movie.producers, params.dig('movie', 'producers'))
+  end
+
+  def relation(relation, hashed_relation)
+    return unless hashed_relation.present?
+
+    relation << hashed_relation.map do |c|
+      Person.find(c[:id]) if c[:id]
+    end
   end
 
   def movie
