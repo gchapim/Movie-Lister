@@ -6,7 +6,7 @@ RSpec.describe 'Movies API', type: :request do
 
   describe 'GET /movies' do
     it 'returns movies' do
-      get '/movies'
+      get '/api/movies'
 
       json = JSON.parse(response.body)
       expect(json).not_to be_empty
@@ -15,9 +15,9 @@ RSpec.describe 'Movies API', type: :request do
     end
   end
 
-  describe 'GET /movies/:id' do
+  describe 'GET /api/movies/:id' do
     it 'returns movie' do
-      get "/movies/#{movie_id}"
+      get "/api/movies/#{movie_id}"
 
       json = JSON.parse(response.body)
       expect(json).not_to be_empty
@@ -32,7 +32,7 @@ RSpec.describe 'Movies API', type: :request do
     end
   end
 
-  describe 'PUT /movies/:id' do
+  describe 'PUT /api/movies/:id' do
     context 'given params and a movie' do
       let!(:movie) { create(:movie) }
       let(:movie_params) do
@@ -50,7 +50,7 @@ RSpec.describe 'Movies API', type: :request do
 
         it 'updates movies' do
           expect do
-            put "/movies/#{movie.id}", params: movie_params, headers: headers
+            put "/api/movies/#{movie.id}", params: movie_params, headers: headers
             movie.reload
           end.to change{ [movie.title, movie.release_year] }.to(['Star Wars III', 2015])
 
@@ -59,10 +59,47 @@ RSpec.describe 'Movies API', type: :request do
 
         it 'does not update unpermitted params' do
           expect do
-            put "/movies/#{movie.id}", params: movie_params, headers: headers
+            put "/api/movies/#{movie.id}", params: movie_params, headers: headers
           end.not_to change{ movie.release_year }
 
           expect(response.code).to be_eql('200')
+        end
+
+        context 'given relation' do
+          let!(:person) { create(:person) }
+          before do
+            movie_params[:movie][:casting] = [{ id: person.id }]
+            movie_params[:movie][:directors] = [{ id: person.id }]
+            movie_params[:movie][:producers] = [{ id: person.id }]
+          end
+
+          it 'updates relation' do
+            expect do
+              put "/api/movies/#{movie.id}", params: movie_params, headers: headers
+              movie.reload
+            end.to change{ [movie.directors.count, movie.producers.count, movie.casting.count] }.to([1, 1, 1])
+          end
+        end
+
+        context 'given existing relation' do
+          let!(:person) { create(:person) }
+          before do
+            movie.update(casting: [person], directors: [person], producers: [person])
+
+            movie_params[:movie][:casting] = [{ id: person.id, _delete: true }]
+            movie_params[:movie][:directors] = [{ id: person.id, _delete: true }]
+            movie_params[:movie][:producers] = [{ id: person.id, _delete: true }]
+          end
+
+          context 'given delete params' do
+
+            it 'deletes relations' do
+              expect do
+                put "/api/movies/#{movie.id}", params: movie_params, headers: headers
+                movie.reload
+              end.to change{ [movie.directors.count, movie.producers.count, movie.casting.count] }.to([0, 0, 0])
+            end
+          end
         end
       end
 
@@ -70,7 +107,7 @@ RSpec.describe 'Movies API', type: :request do
         let(:headers) { { 'Authorization' => 'INVALID_TOKEN' } }
 
         it 'does not update' do
-          put "/movies/#{movie.id}", params: movie_params, headers: headers
+          put "/api/movies/#{movie.id}", params: movie_params, headers: headers
 
           expect(response.code).to be_eql('401')
         end
@@ -94,10 +131,27 @@ RSpec.describe 'Movies API', type: :request do
 
         it 'create movies' do
           expect do
-            post "/movies", params: movie_params, headers: headers
+            post "/api/movies", params: movie_params, headers: headers
           end.to change{ Movie.count }.by(1)
 
           expect(response.code).to be_eql('201')
+        end
+
+        context 'given relation' do
+          let!(:person) { create(:person) }
+          before do
+            movie_params[:movie][:casting] = [{ id: person.id }]
+            movie_params[:movie][:directors] = [{ id: person.id }]
+            movie_params[:movie][:producers] = [{ id: person.id }]
+          end
+
+          it 'creates with relation' do
+            post "/api/movies", params: movie_params, headers: headers
+
+            expect(Movie.last.casting.count).to be_eql 1
+            expect(Movie.last.producers.count).to be_eql 1
+            expect(Movie.last.directors.count).to be_eql 1
+          end
         end
       end
 
@@ -105,7 +159,7 @@ RSpec.describe 'Movies API', type: :request do
         let(:headers) { { 'Authorization' => 'INVALID_TOKEN' } }
 
         it 'create movies' do
-          post "/movies", params: movie_params, headers: headers
+          post "/api/movies", params: movie_params, headers: headers
           expect(response.code).to be_eql('401')
         end
       end
@@ -120,7 +174,7 @@ RSpec.describe 'Movies API', type: :request do
         let(:headers) { { 'Authorization' => 'VALID_TOKEN' } }
 
         it 'delete movies' do
-          delete "/movies/#{movie.id}", headers: headers
+          delete "/api/movies/#{movie.id}", headers: headers
 
           expect(Movie.where(id: movie.id).count).to be_eql(0)
           expect(response.code).to be_eql('204')
@@ -131,7 +185,7 @@ RSpec.describe 'Movies API', type: :request do
         let(:headers) { { 'Authorization' => 'INVALID_TOKEN' } }
 
         it 'create movies' do
-          delete "/movies/#{movie.id}", headers: headers
+          delete "/api/movies/#{movie.id}", headers: headers
           expect(response.code).to be_eql('401')
         end
       end

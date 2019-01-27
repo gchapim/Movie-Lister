@@ -60,8 +60,15 @@ class PeopleController < ApplicationController
   def relation(relation, hashed_relation)
     return unless hashed_relation.present?
 
-    relation << hashed_relation.map do |c|
-      Movie.find(c[:id]) if c[:id]
+    hashed_relation.each do |c|
+      next unless c[:id]
+
+      m = Movie.find(c[:id])
+      if(c[:_delete])
+        relation.delete(m)
+      else
+        relation << m
+      end
     end
   end
 
