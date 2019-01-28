@@ -36,7 +36,7 @@ https://immense-brook-54887.herokuapp.com/
 For now there's no proper Authentication (you can use **VALID_TOKEN** as auth token).
 
 #### Todo:
-* **Fix forms involving collections (right now they do work - you can add and delete from collection via forms - but they aren't reactive. You have to go back and forth to see changes)**
+* **Fix forms involving collections (right now they do work - you can add and delete from collection via forms - but they aren't reactive. You have to go back and forth after submit to see changes)**
 * DRY up React code (reuse components - _I was in a hurry so there are a **LOT** of things to improve_)
 * ESLint _(again, I was in a hurry :( )_
 * Account Auth (using jwt or oauth2 between front and back end)
