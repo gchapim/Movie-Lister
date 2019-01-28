@@ -119,7 +119,7 @@ i
           <MoviesFormList label='Movies as Director' movies={person.movies_as_director} handler={this.handleDirectorsChange} allMovies={this.state.allMovies} />
           <MoviesFormList label='Movies as Actor' movies={person.movies_as_actor} handler={this.handleCastingChange} allMovies={this.state.allMovies}/>
           <MoviesFormList label='Movies as Producer' movies={person.movies_as_producer} handler={this.handleProducersChange} allMovies={this.state.allMovies} />
-          <Form.Button onClick={this.submit} fluid>Submit</Form.Button>
+          <Form.Button onClick={this.submit}>Submit</Form.Button>
         </Form>
       </div>
     )

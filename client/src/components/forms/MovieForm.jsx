@@ -135,7 +135,7 @@ i
           <PeopleFormList label='Directors' people={movie.directors} handler={this.handleDirectorsChange} allPeople={this.state.allPeople} />
           <PeopleFormList label='Casting' people={movie.casting} handler={this.handleCastingChange} allPeople={this.state.allPeople}/>
           <PeopleFormList label='Producers' people={movie.producers} handler={this.handleProducersChange} allPeople={this.state.allPeople} />
-          <Form.Button onClick={this.submit} fluid>Submit</Form.Button>
+          <Form.Button onClick={this.submit}>Submit</Form.Button>
         </Form>
       </div>
     )

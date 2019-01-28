@@ -36,7 +36,7 @@ class PersonInfo extends Component {
             { ({isAuth}) => (
               isAuth ? (
                 <Button as={Link} to={ '/person/' + person.id + '/edit'} animated>
-                  <Button.Content visible>Back</Button.Content>
+                  <Button.Content visible>Edit</Button.Content>
                   <Button.Content hidden>
                     <Icon name='edit outline' />
                   </Button.Content>
@@ -44,6 +44,13 @@ class PersonInfo extends Component {
               ) : null
             )}
           </AuthConsumer>
+          <Button as={Link} to='/' animated>
+            <Button.Content visible>Movies</Button.Content>
+            <Button.Content hidden>
+              <Icon name='film' />
+            </Button.Content>
+          </Button>
+          <Divider hidden section />
           {person && person.id ? (
             <Person person={person} />
           ) : (

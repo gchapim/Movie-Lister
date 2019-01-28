@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Header, Button, Icon } from 'semantic-ui-react'
+import { Container, Header, Button, Icon, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import PeopleList from '../people/PeopleList'
 import { AuthConsumer } from '../contexts/AuthContext'
@@ -25,6 +25,7 @@ const Movie = ({movie}) => {
             </Button>
         )}
       </AuthConsumer>
+      <Divider hidden section />
       <Container text>
         <Header as="h2">{movie.title} ({movie.release_year})</Header>
         <PeopleList people={movie.directors} title="Director" />
