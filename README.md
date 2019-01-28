@@ -1,24 +1,43 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Movie Lister
+#### A Rails + React + Heroku App
+https://immense-brook-54887.herokuapp.com/
 
-Things you may want to cover:
+* Endpoints available from backend: 
+`GET /api/movies/`
+`GET /api/movies/:id`
+`GET /api/people/`
+`GET /api/people/:id`
 
-* Ruby version
+* Auth Endpoint:
+`GET /api/sessions/auth`
 
-* System dependencies
+* Protected Endpoints (Authorization in header):
+`POST /api/movies/`
+`PUT /api/movies/:id`
+`DELETE /api/movies/:id`
+`POST /api/people/`
+`PUT /api/people/:id`
+`DELETE /api/people/:id`
 
-* Configuration
+For now there's no proper Authentication (you can use VALID_TOKEN as auth token).
 
-* Database creation
+#### Todo:
+* **Fix forms involving collections (right now they do work but they aren't reactive. You have to go back and forth to see changes)**
+* DRY up React code (reuse components)
+* ESLint
+* Account Auth (using jwt or oauth2 between front and back end)
 
-* Database initialization
+#### Libs and Frameworks used:
+* Rails v5.2.1
+* PostgreSQL
+* Rspec for tests along with Factorybot, Faker and Database Cleaner
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Frontend:
+* React v16.7.0
+* Axios
+* React-Router-Dom
+* Semantic-Ui-React
+* Node v10.8
+* Yarn v1.13
