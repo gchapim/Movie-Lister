@@ -4,7 +4,8 @@
 #### A Rails + React + Heroku App
 https://immense-brook-54887.herokuapp.com/
 
-* Endpoints available from backend: 
+* Endpoints available from backend:
+
 `GET /api/movies/`
 
 `GET /api/movies/:id`
@@ -15,9 +16,11 @@ https://immense-brook-54887.herokuapp.com/
 
 
 * Auth Endpoint:
+
 `GET /api/sessions/auth`
 
 * Protected Endpoints (Authorization in header):
+
 `POST /api/movies/`
 
 `PUT /api/movies/:id`
