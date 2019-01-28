@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Container, Header, Button, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import PeopleList from '../people/PeopleList'
+import { AuthConsumer } from '../contexts/AuthContext'
 
 const Movie = ({movie}) => {
   return(
@@ -13,6 +14,17 @@ const Movie = ({movie}) => {
           <Icon name='arrow left' />
         </Button.Content>
       </Button>
+      <AuthConsumer>
+        { ({isAuth}) => (
+          isAuth &&
+            <Button as={Link} to={movie.id + '/edit'} animated>
+              <Button.Content visible>Edit</Button.Content>
+              <Button.Content hidden>
+                <Icon name='edit outline' />
+              </Button.Content>
+            </Button>
+        )}
+      </AuthConsumer>
       <Container text>
         <Header as="h2">{movie.title} ({movie.release_year})</Header>
         <PeopleList people={movie.directors} title="Director" />

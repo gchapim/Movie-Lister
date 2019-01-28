@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Header, Icon, Divider, Button } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Container, Header, Icon, Divider } from 'semantic-ui-react'
 import PersonRequest from './requests/PersonRequest'
-import Person from './people/Person'
+import PersonForm from './forms/PersonForm'
 import Loading from './support/Loading'
-import { AuthConsumer } from './contexts/AuthContext'
 
-class PersonInfo extends Component {
+class PersonEdit extends Component {
   constructor(props) {
     super(props);
 
@@ -26,26 +24,14 @@ class PersonInfo extends Component {
       {person ? (
         <Container text>
           <Header as='h2' icon textAlign='center' color='purple'>
-            <Icon name='user' circular />
+            <Icon name='film' circular />
             <Header.Content>
-              Person info
+              Person Editing...
             </Header.Content>
           </Header>
           <Divider hidden section />
-          <AuthConsumer>
-            { ({isAuth}) => (
-              isAuth ? (
-                <Button as={Link} to={ '/person/' + person.id + '/edit'} animated>
-                  <Button.Content visible>Back</Button.Content>
-                  <Button.Content hidden>
-                    <Icon name='edit outline' />
-                  </Button.Content>
-                </Button>
-              ) : null
-            )}
-          </AuthConsumer>
           {person && person.id ? (
-            <Person person={person} />
+            <PersonForm person={person} />
           ) : (
             <Container textAlign='center'>No people found.</Container>
           )}
@@ -61,7 +47,7 @@ class PersonInfo extends Component {
   }
 }
 
-PersonInfo.propTypes = {
+PersonEdit.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
@@ -69,4 +55,4 @@ PersonInfo.propTypes = {
   })
 }
 
-export default PersonInfo;
+export default PersonEdit;

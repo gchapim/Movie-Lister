@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Container, Header, Icon, Divider } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import { Container, Header, Icon, Divider, Button } from 'semantic-ui-react'
+import { AuthConsumer } from './contexts/AuthContext'
 import MoviesRequest from './requests/MoviesRequest'
 import MovieList from './movies/MovieList'
 import Loading from './support/Loading'
@@ -29,6 +31,16 @@ class HomeMovie extends Component {
             </Header.Content>
           </Header>
           <Divider hidden section />
+          <AuthConsumer>
+            { ({isAuth}) => (
+              isAuth ? (
+                <div>
+                  <Button as={Link} to='/movie/new'>Create</Button>
+                  <Button as={Link} to='/people'>Manage People</Button>
+                </div>
+              ) : ( <Button as={Link} to='/login'>Login</Button> )
+            )}
+          </AuthConsumer>
           {movies && movies.length ? (
             <MovieList movies={movies} />
           ) : (
